@@ -1,0 +1,13 @@
+<!doctype html>
+    <title>Upload new File and your thought</title>
+    <h1>Upload new File </h1>
+    <form action="" method=post enctype=multipart/form-data>
+      <p><input type=file name=file>
+         <input name=thought type=text>
+         <input type=submit value=Upload>
+    {% if filename1 %}
+      <h1>This is your poster</h1>
+      <img src={{url_for('static', filename=filename1)}} align="middle"  />
+    {% else %}
+      <h1>Hello, World!</h1>
+    {% endif %}
