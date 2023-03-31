@@ -10,7 +10,6 @@ from PIL import Image
 from stability_sdk import client
 import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation
 import time
-    
 
 # NB: host url is not prepended with \"https\" nor does it have a trailing slash.
 os.environ['STABILITY_HOST'] = 'grpc.stability.ai:443'
@@ -38,31 +37,31 @@ def upload_file():
 
 @app.route('/', methods=['POST'])
 def uploading_file():
-    file = request.files['file']
+    file = request.files['file'].read()
+    print(io.BytesIO(file))
     thought = request.form.get('thought')
-    if file and allowed_file(file.filename):
-        image = Image.open(file)
-        answers = stability_api.generate(
-            prompt = thought,
-            init_image=image.resize((256,256)),
-            seed=12345, # if provided, specifying a random seed makes results deterministic
-            steps=30, # defaults to 30 if not specified
-            start_schedule=0.25,
-        )
-        for resp in answers:
-            for artifact in resp.artifacts:
-                if artifact.finish_reason == generation.FILTER:
-                    warnings.warn(
-                        "Your request activated the API's safety filters and could not be processed."
-                        "Please modify the prompt and try again.")
-                if artifact.type == generation.ARTIFACT_IMAGE:
-                    img = Image.open(io.BytesIO(artifact.binary))
-        rgb_im = img.convert("RGB")
-        localtime = time.localtime()
-        result = time.strftime("%Y%m%d%I%M%S%p", localtime)
-        filename = str(result) + ".jpg"
-        rgb_im.save("../proj/static/" + filename)
-        return render_template('index.html' , filename1 = filename)
+    image = Image.open(io.BytesIO(file))
+    answers = stability_api.generate(
+        prompt = thought,
+        init_image=image.resize((256,256)),
+        seed=12345, # if provided, specifying a random seed makes results deterministic
+        steps=30, # defaults to 30 if not specified
+        start_schedule=0.25,
+    )
+    for resp in answers:
+        for artifact in resp.artifacts:
+            if artifact.finish_reason == generation.FILTER:
+                warnings.warn(
+                    "Your request activated the API's safety filters and could not be processed."
+                    "Please modify the prompt and try again.")
+            if artifact.type == generation.ARTIFACT_IMAGE:
+                img = Image.open(io.BytesIO(artifact.binary))
+    rgb_im = img.convert("RGB")
+    localtime = time.localtime()
+    result = time.strftime("%Y%m%d%I%M%S%p", localtime)
+    filename = str(result) + ".jpg"
+    rgb_im.save("./proj/static/" + filename)
+    return render_template('index.html' , filename1 = filename)
     
 
 if __name__ == '__main__':
