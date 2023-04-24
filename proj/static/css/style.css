@@ -94,7 +94,12 @@ input[type="file"] {
   background-clip: content-box;
 }
 
-
+.obj {
+	width: 200px;
+	height: 200px;
+	margin: 20px;
+	padding: 10px;
+}
 
 .display_none {
   display: none;
