@@ -59,7 +59,7 @@ def uploading_file():
     rgb_im = img.convert("RGB")
     localtime = time.localtime()
     result = time.strftime("%Y%m%d%I%M%S%p", localtime)
-    filename = str(result) + ".jpg"
+    filename = "images/" + str(result) + ".jpg"
     rgb_im.save("./proj/static/" + filename)
     return render_template('index.html' , filename1 = filename)
     
