@@ -1,0 +1,36 @@
+<!doctype html>
+    <head>
+      <title>Upload new File and your thought</title>
+      <link rel = "stylesheet" href={{url_for('static', filename="css/style.css")}} >
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    </head>
+    <body>
+      <div class = "wrapper">
+        <div class = "product">
+          <div class = "info">
+            <div class="animated bounce" style="font-size:1cm;" id="example">Poster Maker!</div> 
+            <form  id = "upload_form"
+            action="" method=post enctype=multipart/form-data>
+                <input type="file" id="fileUploader" class="display-none" onchange="handleFiles(this.files)" name='file'/>
+                <div id="upload-zone" class="upload-zone">
+                    請將要上傳的圖片拖曳至此
+                </div>
+                <div id="preview"></div>
+                <input id = "thought" name=thought type=text>
+                <input id = "submit" type=submit value=Upload>
+            </div
+            ><div class = "poster">
+          {% if filename1 %}
+              <img class="poster__img" src={{url_for('static', filename=filename1)}}  />
+          {% else %}
+              <img class="poster__img" id = "pimg" src={{url_for('static', filename="images/20230330114934PM.jpg")}}  />
+            
+          {% endif %}
+          </div>
+          <script src={{url_for('static', filename="js/main.js")}}>
+          </script>
+        </div>
+      </div>
+    </body>
