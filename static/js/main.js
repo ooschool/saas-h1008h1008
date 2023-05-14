@@ -2,14 +2,27 @@
 const dropbox = document.getElementById("upload-zone");
 const preview = document.getElementById("preview");
 
-// function handleFileSelect(e) {
-//     debugger;
-//     e.stopPropagation();
-//     e.preventDefault();
-//     const fileUploader = document.getElementById("fileUploader");
-//     fileUploader.click();
-//     dropbox.classList.remove("upload_zone_enter");
-// }
+var globalFlag = 0;
+
+// Get the "Poster Maker" choice element
+const posterMakerChoice = document.getElementById('posterd');
+
+// Add a click event listener to the "Poster Maker" choice
+posterMakerChoice.addEventListener('click', function() {
+  // Set the global flag to 1
+  globalFlag = 0;
+  const exampleElement = document.getElementById("example");
+  exampleElement.innerText = "Poster Maker!";
+},false);
+const Choice = document.getElementById('productd');
+
+// Add a click event listener to the "Poster Maker" choice
+Choice.addEventListener('click', function() {
+  // Set the global flag to 1
+  globalFlag = 1;
+  const exampleElement = document.getElementById("example");
+  exampleElement.innerText = "Product Designer!";
+},false);
 
 const click = e => handleFileSelect(e);
 
@@ -86,7 +99,7 @@ document.getElementById("upload_form").addEventListener("submit", function (e){
     const formData = new FormData();
     formData.append("thought", thought);
     formData.append("file", file);
-
+    formData.append("flag", globalFlag);
     fetch("/", {
         method: "POST",
         body: formData
