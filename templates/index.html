@@ -7,6 +7,10 @@
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
     </head>
     <body>
+      <div class="ring" id = "load">Loading
+        <span></span>
+      </div>
+      <div class="overlay" id = "over"></div>
       <div class = "wrapper">
         <div class = "product">
           <div id = "posterd" class = "choice">Poster Maker</div>
@@ -17,16 +21,21 @@
             action="" method=post enctype=multipart/form-data>
                 <input type="file" id="fileUploader" class="display-none" onchange="handleFiles(this.files)" name='file'/>
                 <div id="upload-zone" class="upload-zone">
-                    請將要上傳的圖片拖曳至此
+                    1.將商品圖片拖曳至此來更改背景
                 </div>
                 <div id="preview"></div>
-                <input id = "thought" name=thought type=text>
+                <input id = "thought" placeholder="2.請輸入期望背景長相"  name=thought type=text/>
                 <input id = "submit" type=submit value=Upload>
+                <input id = "rand" type=button value="隨機生成商品提示">
+                <div id="randtext">
+                  1. A luxury lotion bottle<br>2. The toy  robot <br>3. Delicious salmon<br>4.modern TV<br>
+              </div>
             </div
             ><div class = "poster">
           {% if filename1 %}
               <img class="poster__img" src={{url_for('static', filename=filename1)}}  />
           {% else %}
+              <div class = "p" id = "instr">Your Poster</div>
               <img class="poster__img" id = "pimg" src={{url_for('static', filename="images/20230330114934PM.jpg")}}  />
             
           {% endif %}
