@@ -10,6 +10,15 @@ from PIL import Image
 from stability_sdk import client
 import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation
 import time
+<<<<<<< Updated upstream
+=======
+import openai
+import re
+import requests
+import base64
+import json
+import service
+>>>>>>> Stashed changes
 load_dotenv()
 # NB: host url is not prepended with \"https\" nor does it have a trailing slash.
 STABILITY_HOST = os.getenv('ALLOWED_EXTENSIONS')
@@ -22,15 +31,20 @@ stability_api = client.StabilityInference(
 )
 
 
+def gen_filename():
+    script_path = os.path.abspath( __file__ )
+    localtime = time.localtime()
+    result = time.strftime("%Y%m%d%I%M%S%p", localtime)
+    filename = "/static/images/" + str(result) + ".jpg"
+    file_path = os.path.dirname(script_path)  + filename
+    # Save the image as a JPG file
+    return filename , file_path
 
 ALLOWED_EXTENSIONS = os.getenv('ALLOWED_EXTENSIONS')
 app = Flask(__name__,template_folder='templates')
 app.config['UPLOAD_FOLDER'] = os.getenv('UPLOAD_FOLDER')
 MAX_CONTENT_LENGTH = os.getenv('MAX_CONTENT_LENGTH')
 app.config['MAX_CONTENT_LENGTH'] = int(MAX_CONTENT_LENGTH)
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 @app.route('/', methods=['GET'])
 def upload_file():
@@ -38,6 +52,7 @@ def upload_file():
 
 @app.route('/', methods=['POST'])
 def uploading_file():
+<<<<<<< Updated upstream
     print(request)
     file = request.files['file'].read()
     thought = request.form.get('thought')
@@ -64,6 +79,51 @@ def uploading_file():
     filename = "/static/images/" + str(result) + ".jpg"
     rgb_im.save(os.path.dirname(script_path)  + filename)
     return filename
+=======
+    flag = request.form.get('flag')
+    if flag == 'rand':
+        filename = service.random_gen_prompts()
+        title = 'Your Poster'
+        return {'filename': filename, 'title': title}
+    thought = request.form.get('thought')
+    json_string = service.extend_prompts(thought)
+    data = json.loads(json_string)
+    title = data["title"]
+    prompt = data["prompt"]
+    print(prompt)
+    if flag == 'poster':
+        file = request.files['file'].read()
+        response = service.poster_image(file , prompt, MOKKER_KEY)
+        if response.status_code != 200:
+            print("Error:", response.text)
+        try:
+            # Retrieve the generated images list
+            images = response.json().get('images', [])
+            if len(images) == 0:
+                print("No generated images found in the response.")
+                print("Response content:", response.content.decode())
+            image = images[0]
+            # Retrieve the generated image data
+            image_data = image.get('image', {}).get('data')
+            if not image_data:
+                print("Generated image data not found for an image.")
+                # Decode the base64 image data
+            image_bytes = base64.b64decode(image_data)
+            filename , file_path = gen_filename()
+            with open(file_path, 'wb') as file:
+                file.write(image_bytes)
+            print(f"Image saved successfully as {file_path}.")
+            # Specify the file path and name     
+        except ValueError as e:
+            print("Error parsing the response JSON:", str(e))
+            
+    else:
+        rgb_im = service.product_image(prompt, STABILITY_KEY)
+        filename , file_path = gen_filename()
+        rgb_im.save(file_path)
+
+    return {'filename': filename, 'title': title}
+>>>>>>> Stashed changes
     
 
 if __name__ == '__main__':

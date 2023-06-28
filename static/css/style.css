@@ -104,3 +104,122 @@ input[type="file"] {
 .display-none {
   display: none;
 }
+<<<<<<< Updated upstream
+=======
+.ring
+{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:150px;
+  height:150px;
+  background:transparent;
+  border:3px solid #3c3c3c;
+  border-radius:50%;
+  text-align:center;
+  line-height:150px;
+  font-family:sans-serif;
+  font-size:20px;
+  color:#EF9FBF;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  text-shadow:0 0 10px #EF9FBF;
+  box-shadow:0 0 20px rgba(0,0,0,.5);
+}
+.ring:before
+{
+  content:'';
+  position:absolute;
+  top:-3px;
+  left:-3px;
+  width:100%;
+  height:100%;
+  border:3px solid transparent;
+  border-top:3px solid #EF9FBF;
+  border-right:3px solid #EF9FBF;
+  border-radius:50%;
+  animation:animateC 2s linear infinite;
+}
+span
+{
+  display:block;
+  position:absolute;
+  top:calc(50% - 2px);
+  left:50%;
+  width:50%;
+  height:4px;
+  background:transparent;
+  transform-origin:left;
+  animation:animate 2s linear infinite;
+}
+span:before
+{
+  content:'';
+  position:absolute;
+  width:16px;
+  height:16px;
+  border-radius:50%;
+  background:#EF9FBF;
+  top:-6px;
+  right:-8px;
+  box-shadow:0 0 20px #EF9FBF;
+}
+@keyframes animateC
+{
+  0%
+  {
+    transform:rotate(0deg);
+  }
+  100%
+  {
+    transform:rotate(360deg);
+  }
+}
+@keyframes animate
+{
+  0%
+  {
+    transform:rotate(45deg);
+  }
+  100%
+  {
+    transform:rotate(405deg);
+  }
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(251, 247, 247, 0.5); /* Black color with 50% opacity */
+  z-index: 9999; /* Ensure the overlay appears above other elements */
+}
+.option{
+  padding: 4px;
+  margin-bottom:  4px;
+  border: 1px solid lightgrey;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.option:hover{
+  border: 1px solid grey;
+}
+.btn {
+  border: 2px solid black;
+  background-color: white;
+  color: black;
+  cursor: pointer;
+}
+
+
+.default {
+  border-color: #e7e7e7;
+  color: black;
+}
+
+.default:hover {
+  background: #e7e7e7;
+}
+>>>>>>> Stashed changes
