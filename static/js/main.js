@@ -1,17 +1,6 @@
 
 const dropbox = document.getElementById("upload-zone");
 const preview = document.getElementById("preview");
-<<<<<<< Updated upstream
-
-// function handleFileSelect(e) {
-//     debugger;
-//     e.stopPropagation();
-//     e.preventDefault();
-//     const fileUploader = document.getElementById("fileUploader");
-//     fileUploader.click();
-//     dropbox.classList.remove("upload_zone_enter");
-// }
-=======
 var thoughtInput = document.getElementById("rand");
 thoughtInput.style.display = "none"
 var elements = document.querySelectorAll('#randtext');
@@ -101,7 +90,6 @@ Choice.addEventListener('click', function() {
   const randtextDiv = document.getElementById("instr");
   randtextDiv.innerHTML = 'Your Poster';
 },false);
->>>>>>> Stashed changes
 
 const click = e => handleFileSelect(e);
 
@@ -125,11 +113,6 @@ function handleFiles(files) {
     dropbox.classList.remove("upload-zone--enter");
     for (var i = 0; i < files.length; i++) {
         const file = files[i];
-        const imageType = /image.*/;
-
-        if (!file.type.match(imageType)) {
-            continue;
-        }
 
         const img = document.createElement("img");
         img.classList.add("obj");
@@ -162,11 +145,8 @@ dropbox.addEventListener("drop", drop, false);
 function showLoading() {
     const submitButton = document.getElementById("submit");
     submitButton.disabled = true;
-    
-    // Create the loading element
-    const loading = document.createElement('div');
-    loading.classList.add('loading');
-    document.body.appendChild(loading);
+    document.getElementById("load").style.display = "block"
+  document.getElementById("over").style.display = "block"
   }
 var optionDivs = document.getElementsByClassName('option');
 
@@ -187,6 +167,8 @@ for (var i = 0; i < optionDivs.length; i++) {
     }).then(function(data) {
       document.getElementById("load").style.display = "none"
       document.getElementById("over").style.display = "none"
+      var thoughtInput = document.getElementById("thought");
+      thoughtInput.value = "";
       const submitButton = document.getElementById("submit");
       submitButton.disabled = false;
       const poster = document.querySelector(".poster__img");
@@ -205,26 +187,27 @@ document.getElementById("upload_form").addEventListener("submit", function (e){
 
     const formData = new FormData();
     formData.append("thought", thought);
-<<<<<<< Updated upstream
-    formData.append("file", file);
-
-=======
     if (globalFlag === 'poster') {
       // Code to be executed if globalFlag is equal to 0
       formData.append("file", file);
       // Additional code here...
     }
     formData.append("flag", globalFlag);
->>>>>>> Stashed changes
     fetch("/", {
         method: "POST",
         body: formData
       }).then(function(response) {
-        return response.text(); // Get response body as text
-      }).then(function(filename) {
+        return response.json(); // Get response body as text
+      }).then(function(data) {
+        document.getElementById("load").style.display = "none"
+        document.getElementById("over").style.display = "none"
+        var thoughtInput = document.getElementById("thought");
+        thoughtInput.value = "";
         const submitButton = document.getElementById("submit");
         submitButton.disabled = false;
         const poster = document.querySelector(".poster__img");
-        poster.setAttribute("src",  filename);
+        poster.setAttribute("src",  data.filename);
+        const randtextDiv = document.getElementById("instr");
+        randtextDiv.innerHTML = data.title;
       });
 });

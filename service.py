@@ -5,9 +5,20 @@ from PIL import Image
 from stability_sdk import client
 import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation
 import openai
+import time
 import requests
+import  os
+def gen_filename():
+    script_path = os.path.abspath( __file__ )
+    localtime = time.localtime()
+    result = time.strftime("%Y%m%d%I%M%S%p", localtime)
+    filename = "/static/images/" + str(result) + ".jpg"
+    file_path = os.path.dirname(script_path)  + filename
+    # Save the image as a JPG file
+    return filename , file_path
 
 def random_gen_prompts():
+    openai.api_key = os.getenv("OPENAI_KEY")
     response = openai.ChatCompletion.create(
     model="gpt-3.5-turbo",
     messages=[
@@ -21,6 +32,7 @@ def random_gen_prompts():
     )
     return response['choices'][0]['message']['content']
 def extend_prompts(string):
+    openai.api_key = os.getenv("OPENAI_KEY")
     response = openai.ChatCompletion.create(
     model="gpt-3.5-turbo",
     messages=[

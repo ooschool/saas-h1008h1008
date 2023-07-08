@@ -10,35 +10,22 @@ from PIL import Image
 from stability_sdk import client
 import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation
 import time
-<<<<<<< Updated upstream
-=======
 import openai
 import re
 import requests
 import base64
 import json
 import service
->>>>>>> Stashed changes
 load_dotenv()
 # NB: host url is not prepended with \"https\" nor does it have a trailing slash.
 STABILITY_HOST = os.getenv('ALLOWED_EXTENSIONS')
 # To get your API key, visit https://beta.dreamstudio.ai/membership
 STABILITY_KEY = os.getenv('STABILITY_KEY')
-print(STABILITY_KEY)
+MOKKER_KEY = os.getenv('MOKKER_KEY')
 stability_api = client.StabilityInference(
     key=STABILITY_KEY, 
     verbose=True,
 )
-
-
-def gen_filename():
-    script_path = os.path.abspath( __file__ )
-    localtime = time.localtime()
-    result = time.strftime("%Y%m%d%I%M%S%p", localtime)
-    filename = "/static/images/" + str(result) + ".jpg"
-    file_path = os.path.dirname(script_path)  + filename
-    # Save the image as a JPG file
-    return filename , file_path
 
 ALLOWED_EXTENSIONS = os.getenv('ALLOWED_EXTENSIONS')
 app = Flask(__name__,template_folder='templates')
@@ -52,34 +39,6 @@ def upload_file():
 
 @app.route('/', methods=['POST'])
 def uploading_file():
-<<<<<<< Updated upstream
-    print(request)
-    file = request.files['file'].read()
-    thought = request.form.get('thought')
-    image = Image.open(io.BytesIO(file))
-    answers = stability_api.generate(
-        prompt = thought,
-        init_image=image.resize((256,256)),
-        seed=12345, # if provided, specifying a random seed makes results deterministic
-        steps=30, # defaults to 30 if not specified
-        start_schedule=0.25,
-    )
-    for resp in answers:
-        for artifact in resp.artifacts:
-            if artifact.finish_reason == generation.FILTER:
-                warnings.warn(
-                    "Your request activated the API's safety filters and could not be processed."
-                    "Please modify the prompt and try again.")
-            if artifact.type == generation.ARTIFACT_IMAGE:
-                img = Image.open(io.BytesIO(artifact.binary))
-    rgb_im = img.convert("RGB")
-    localtime = time.localtime()
-    result = time.strftime("%Y%m%d%I%M%S%p", localtime)
-    script_path = os.path.abspath( __file__ )
-    filename = "/static/images/" + str(result) + ".jpg"
-    rgb_im.save(os.path.dirname(script_path)  + filename)
-    return filename
-=======
     flag = request.form.get('flag')
     if flag == 'rand':
         filename = service.random_gen_prompts()
@@ -109,7 +68,7 @@ def uploading_file():
                 print("Generated image data not found for an image.")
                 # Decode the base64 image data
             image_bytes = base64.b64decode(image_data)
-            filename , file_path = gen_filename()
+            filename , file_path = service.gen_filename()
             with open(file_path, 'wb') as file:
                 file.write(image_bytes)
             print(f"Image saved successfully as {file_path}.")
@@ -119,11 +78,10 @@ def uploading_file():
             
     else:
         rgb_im = service.product_image(prompt, STABILITY_KEY)
-        filename , file_path = gen_filename()
+        filename , file_path = service.gen_filename()
         rgb_im.save(file_path)
 
     return {'filename': filename, 'title': title}
->>>>>>> Stashed changes
     
 
 if __name__ == '__main__':
