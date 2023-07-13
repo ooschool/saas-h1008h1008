@@ -58,6 +58,7 @@ posterMakerChoice.addEventListener('click', function() {
   exampleElement.innerText = "Poster Maker!";
   var thoughtInput = document.getElementById("thought");
   thoughtInput.value = "";
+  preview.style.display = "block";
   thoughtInput.placeholder = "2.請輸入期望背景長相";
   const poster = document.querySelector(".poster__img");
   poster.setAttribute("src",  '/static/images/20230330114934PM.jpg');
@@ -112,16 +113,21 @@ function dragover(e) {
 function handleFiles(files) {
     dropbox.classList.remove("upload-zone--enter");
     for (var i = 0; i < files.length; i++) {
-        const file = files[i];
+      const file = files[i];
+      const imageType = /image.*/;
 
-        const img = document.createElement("img");
-        img.classList.add("obj");
-        img.file = file;
-        preview.appendChild(img);
+      if (!file.type.match(imageType)) {
+          continue;
+      }
 
-        const reader = new FileReader();
-        reader.onload = (e => img.src = e.target.result);
-        reader.readAsDataURL(file);
+      const img = document.createElement("img");
+      img.classList.add("obj");
+      img.file = file;
+      preview.appendChild(img);
+
+      const reader = new FileReader();
+      reader.onload = (e => img.src = e.target.result);
+      reader.readAsDataURL(file);
     }
 }
 
@@ -201,6 +207,8 @@ document.getElementById("upload_form").addEventListener("submit", function (e){
       }).then(function(data) {
         document.getElementById("load").style.display = "none"
         document.getElementById("over").style.display = "none"
+        preview.innerHTML = "";
+        dropbox.style.display = "block";
         var thoughtInput = document.getElementById("thought");
         thoughtInput.value = "";
         const submitButton = document.getElementById("submit");

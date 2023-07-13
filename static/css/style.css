@@ -29,14 +29,25 @@ html,body{
 	background-color: #fff;
   display:inline-block;
   cursor: pointer;
+  border-left: 1px solid black;
 }
-.productd{
+.productd {
   height: 3%;
   width: 24%;
-	background-color: #fff;
-  display:inline-block;
+  background-color: #fff;
+  display: inline-block;
   margin-right: 100px;
   cursor: pointer;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  border-top: none;
+  border-bottom: none;
+}
+.productd:hover{
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.posterd:hover{
+  background-color: rgba(255, 255, 255, 0.5);
 }
 .product{
   width: 800px;
@@ -112,8 +123,9 @@ input[type="file"] {
 }
 
 .obj {
-	width: 200px;
-	height: 200px;
+	width: 200px; /* 设置图片的宽度 */
+  height: 200px; /* 设置图片的高度 */
+  object-fit: cover;
 	margin: 20px;
 	padding: 10px;
 }
