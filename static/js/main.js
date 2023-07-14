@@ -14,7 +14,7 @@ var globalFlag = 'poster';
 var randButton = document.getElementById("rand");
 
 randButton.addEventListener("click", function() {
-  // 執行 submit 按鈕的相應操作
+  // 執行 random按鈕的相應操作
   showLoading();
   const formData1 = new FormData();
   formData1.append("flag", 'rand');
@@ -208,7 +208,11 @@ document.getElementById("upload_form").addEventListener("submit", function (e){
         document.getElementById("load").style.display = "none"
         document.getElementById("over").style.display = "none"
         preview.innerHTML = "";
-        dropbox.style.display = "block";
+        if (globalFlag === 'poster') {
+          // Code to be executed if globalFlag is equal to 0
+          dropbox.style.display = "block";
+          // Additional code here...
+        }
         var thoughtInput = document.getElementById("thought");
         thoughtInput.value = "";
         const submitButton = document.getElementById("submit");
